@@ -1,11 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin:'maven-publish'
-apply plugin:'maven'
-apply from: 'publish.gradle'
+//apply plugin:'maven'
+//apply from: 'publish.gradle'
 
 apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.MrBestGG'
+version = '1.0'
 
 android {
     compileSdkVersion 30
@@ -27,4 +28,19 @@ android {
 
 dependencies {
     api project(':FFmpegAndroid')
+    implementation 'com.github.jitpack:android-example:1.0.1'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.aaconverter'
+                artifactId = 'androidAudio-Converter'
+                version = '1.0'
+            }
+        }
+    }
 }
