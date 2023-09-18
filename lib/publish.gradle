@@ -1,0 +1,41 @@
+apply plugin: 'maven-publish'
+
+buildscript {
+    ext{
+        GitHubName = "XinKindOne"
+        // Personal Access Token
+        PAT = null
+
+        File localFile = rootProject.file('local.properties')
+        if (localFile.exists()) {
+            Properties properties = new Properties()
+            properties.load(localFile.newDataInputStream())
+            PAT = properties.getProperty('JohnBase.token')
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/$GitHubName/BaseAndroid")
+            credentials {
+                username = "$GitHubName" ?: System.getenv("USERNAME")
+                if (PAT == null)
+                    password = System.getenv("TOKEN")
+                else
+                    password = PAT
+            }
+        }
+    }
+    publications {
+        JohnBase(MavenPublication) {
+            groupId = 'com.github.aaconverter'
+            artifactId = 'androidAudio-Converter'
+            version = '1.0.0'
+
+            artifact("$buildDir/outputs/aar/androidAudio-Converter-release.aar")
+        }
+    }
+}
